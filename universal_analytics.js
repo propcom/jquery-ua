@@ -3,7 +3,7 @@
 	Example:
 
 		<div
-			class="addImpression"
+			class="ua_addImpression"
 			data-product-id="6901"
 			data-name="Product_01"
 			data-category="Shoes"
