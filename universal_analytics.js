@@ -33,7 +33,7 @@
 
 		...
 
-    $('.ua_addProduct a').on("click", function(e) {
+		$('.ua_addProduct a').on("click", function(e) {
 			e.preventDefault();
 			var $that = $(this);
 			UA.sendSingleProductAction('click', $(this).parent(), function() {
