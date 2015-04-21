@@ -57,7 +57,9 @@
 var UA = (function() {
 
 	var pageviewSent = false;
-
+	var required = {
+		'ec': false
+	};
 
 	function initLibraries() {
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -239,6 +241,14 @@ var UA = (function() {
 	}
 
 
+	function gaRequire(library) {
+		if (! required[library]) {
+			ga('require', library);
+			required[library] = true;
+		}
+	}
+
+
 	function properCase(str) {
 		var upper = str.charAt(0).toUpperCase();
 		var lower = str.substr(1).toLowerCase();
@@ -259,21 +269,21 @@ var UA = (function() {
 
 		sendImpressions: function() {
 			$(function() {
-				ga('require', 'ec');
+				gaRequire('ec');
 				impressions();
 			});
 		},
 
 		sendProductActions: function() {
 			$(function() {
-				ga('require', 'ec');
+				gaRequire('ec');
 				productActions();
 			});
 		},
 
 		sendSingleProductAction: function(action, $element, callback) {
 			$(function() {
-				ga('require', 'ec');
+				gaRequire('ec');
 				singleProductAction(action, $element, callback);
 			});
 		},
