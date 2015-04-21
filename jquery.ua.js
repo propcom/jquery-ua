@@ -135,14 +135,14 @@ var UA = (function() {
 		'add',
 		'remove',
 		'checkout_option',
-		'promo_click',
+		'promo_click'
 	];
 
 	var productActionsBulk = [
 		'detail',
 		'checkout',
 		'purchase',
-		'refund',
+		'refund'
 	];
 
 
@@ -191,7 +191,7 @@ var UA = (function() {
 			'coupon',
 			'list',
 			'step',
-			'option',
+			'option'
 		];
 
 		return dataAttributesIntoObject($element, properties, 'action-');
@@ -223,7 +223,7 @@ var UA = (function() {
 			'hitType': 'event',
 			'eventCategory': 'prop_ua',
 			'eventAction': 'prop_ua_action',
-			'nonInteraction': 1,
+			'nonInteraction': 1
 		}
 
 		if (callback) {
