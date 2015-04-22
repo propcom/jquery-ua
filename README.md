@@ -18,7 +18,7 @@ Initialiaze with your GA tracking code - e.g. `UA.init("UA-12341234-1")`
 
 Collect and send all the data to Google...
 
-##### a) on page load:
+##### a) on page load (bulk):
 ```
 UA.sendImpressions(); // ecommerce tracking
 UA.sendProductActions(); // ecommerce tracking
@@ -39,9 +39,16 @@ $('.ua_addProduct a').on("click", function(e) {
 });
 ```
 
+---
+
 ## Details
 
-Enhance Ecommerce tracking consists of: product impressions and actions and promotion impression and actions.
+Enhanced Ecommerce tracking consists of:
+- product impressions,
+- product actions,
+- promotion impression,
+- promotion clicks.
+
 [Original documentation...]
 (https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce)
 
@@ -80,7 +87,7 @@ Every processed impression gets postfix `-sent` appended - so it's safe to run t
 #### Product Actions
 
 
-##### Bulk
+##### Bulk product actions
 
 Implement on any pages that lead to a complete transaction, e.g. product page, basket, checkout.
 
@@ -123,9 +130,9 @@ Make sure to use **data-product-id** and **data-action-id** (not `data-id`).
 Every processed product action gets postfix `-sent` appended - so it's safe to run the function multiple times e.g. when AJAX-injecting new products.
 
 
-##### Single
+##### Single product actions
 
-If required single actions can be sent using:
+If required, single actions can be sent using:
 
 `UA.sendSingleProductAction('<action_name>', <element_with_data_attributes>, [<callback()>])`.
 
@@ -142,6 +149,8 @@ $('.ua_addProduct a').on("click", function(e) {
 	});
 });
 ```
+
+---
 
 #### Promotion Impressions
 
@@ -167,9 +176,9 @@ Every processed impression gets postfix `-sent` appended - so it's safe to run t
 
 
 
-#### Promotion Actions
+#### Promotion Clicks
 
-##### Bulk
+##### Bulk promotion cliks
 
 ```
 <input type="hidden"
@@ -195,9 +204,9 @@ Refer to [original documentation](https://developers.google.com/analytics/devgui
 Every processed element action gets postfix `-sent` appended - so it's safe to run the function multiple times.
 
 
-##### Single
+##### Single promotion clicks
 
-If required single actions can be sent using:
+If required, single clicks can be sent using:
 
 `UA.sendSinglePromoClick(<element_with_data_attributes>, [<callback()>])`.
 
@@ -214,3 +223,4 @@ $('.promoBanner').on("click", function(e) {
 	});
 });
 ```
+
