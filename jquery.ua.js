@@ -1,59 +1,3 @@
-/**
-
-	Example:
-
-		<div
-			class="ua_addImpression"
-			data-product-id="6901"
-			data-name="Product_01"
-			data-category="Shoes"
-			data-variant="Black"
-			data-price="29.12"
-			data-position="2"
-		>
-		...
-		</div>
-
-		...
-
-		<input type="hidden"
-			class="ua_addProduct"
-			data-ua-ec-actions="purchase"
-			data-product-id="<?= $item->get_product_id() ?>"
-			data-name="<?= $item->get_title() ?>"
-			data-category="<?= $product->get_default_category() ? $product->get_default_category()->title : '' ?>"
-			data-variant="<?= \SW::get_variant_summary($product) ?>"
-			data-price="<?= $item->price ?>"
-			data-quantity="<?= $item->qty ?>"
-			data-action-id="<?= $order->id ?>"
-			data-revenue="<?= $order->total ?>"
-			data-tax="<?= $order->tax_total_price ?>"
-			data-shipping="<?= $order->shipping_net ?>"
-		/>
-
-		...
-
-		$('.ua_addProduct a').on("click", function(e) {
-			e.preventDefault();
-			var $that = $(this);
-			UA.sendSingleProductAction('click', $(this).parent(), function() {
-				location.href = $that.attr('href');
-			});
-		});
-
-		...
-
-		<?= \Theme::instance()->asset->js('universal_analytics.js'); ?>
-		<script>
-			UA.init("UA-40945150-3");
-			UA.sendImpressions();
-			UA.sendProductActions();
-			UA.sendPageview();
-		</script>
-
-*/
-
-
 var UA = (function() {
 
 	var pageviewSent = false;
@@ -68,6 +12,8 @@ var UA = (function() {
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	}
 
+
+	/* PRODUCTS impressions and actions */
 
 	function impressions() {
 		if (! $(".ua_addImpression").size()) return;
@@ -117,6 +63,53 @@ var UA = (function() {
 
 	function singleProductAction(action, $element, callback) {
 		ga('ec:addProduct', buildAddproductPropertiesObject($element));
+
+		var obj = buildActionPropertiesObject($element);
+		if ($.isEmptyObject(obj)) {
+			ga('ec:setAction', action)
+		} else {
+			ga('ec:setAction', action, obj);
+		}
+
+		gaSendNI(callback);
+	}
+
+
+	/* PROMOTIONS impressions and actions */
+
+	function promoImpressions() {
+		var className = "ua_addPromoImpression";
+
+		if (! $("." + className).size()) return;
+
+		var properties = ['id', 'name', 'creative', 'position'];
+
+		$("." + className).each(function() {
+			markAsSent($(this), className);
+			var fieldsObj = {};
+			for (var i in properties) {
+				var p = properties[i];
+				if ($(this).data(p)) {
+					fieldsObj[p] = $(this).data(p);
+				}
+			}
+			ga('ec:addPromo', fieldsObj);
+		});
+
+		gaSendNI();
+	}
+
+
+	function promoClicks() {
+		$(".ua_addPromoClick").each(function() {
+			singlePromoAction('promo_click', $(this));
+			markAsSent($(this), 'ua_addPromo');
+		});
+	}
+
+
+	function singlePromoAction(action, $element, callback) {
+		ga('ec:addPromo', buildAddpromoPropertiesObject($element));
 
 		var obj = buildActionPropertiesObject($element);
 		if ($.isEmptyObject(obj)) {
@@ -197,6 +190,18 @@ var UA = (function() {
 		];
 
 		return dataAttributesIntoObject($element, properties, 'action-');
+	}
+
+
+	function buildAddpromoPropertiesObject($element) {
+		var properties = [
+			'id',
+			'name',
+			'creative',
+			'position'
+		];
+
+		return dataAttributesIntoObject($element, properties);
 	}
 
 	/**
@@ -285,6 +290,27 @@ var UA = (function() {
 			$(function() {
 				gaRequire('ec');
 				singleProductAction(action, $element, callback);
+			});
+		},
+
+		sendPromoImpressions: function() {
+			$(function() {
+				gaRequire('ec');
+				promoImpressions();
+			});
+		},
+
+		sendPromoClicks: function() {
+			$(function() {
+				gaRequire('ec');
+				promoClicks();
+			});
+		},
+
+		sendSinglePromoClick: function($element, callback) {
+			$(function() {
+				gaRequire('ec');
+				singlePromoAction("promo_click", $element, callback);
 			});
 		},
 

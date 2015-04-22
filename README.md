@@ -143,3 +143,74 @@ $('.ua_addProduct a').on("click", function(e) {
 });
 ```
 
+#### Promotion Impressions
+
+```
+<input type="hidden"
+	class="ua_addPromoImpression"
+	data-id="PROMO1"
+	data-name="Summer Sale"
+	data-creative="banner A"
+	data-position="1"
+/>
+
+...
+
+<script>
+  UA.sendPromoImpressions();
+</script>
+```
+
+The `sendPromoImpressions` function expects elements with class `ua_addPromoImpression`.
+
+Every processed impression gets postfix `-sent` appended - so it's safe to run the function multiple times.
+
+
+
+#### Promotion Actions
+
+##### Bulk
+
+```
+<input type="hidden"
+	class="ua_addPromoClick"
+	data-id="PROMO1"
+	data-name="Summer Sale"
+	data-creative="banner A"
+	data-position="1"
+/>
+
+...
+
+<script>
+  UA.sendPromoClicks();
+</script>
+```
+
+The `sendPromoClicks` function expects elements with class `ua_addPromoClick`.
+
+All attributes is a mix of `promoFieldObject` properties.
+Refer to [original documentation](https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce) for details.
+
+Every processed element action gets postfix `-sent` appended - so it's safe to run the function multiple times.
+
+
+##### Single
+
+If required single actions can be sent using:
+
+`UA.sendSinglePromoClick(<element_with_data_attributes>, [<callback()>])`.
+
+Using this method doesn't rely on any classes. All you need is the data attributes.
+
+Callback may be useful if you want to track an action just before redirecting to another page.
+
+```
+$('.promoBanner').on("click", function(e) {
+	e.preventDefault();
+	var $that = $(this);
+	UA.sendSinglePromoClick($that, function() {
+		location.href = $that.attr('href');
+	});
+});
+```
